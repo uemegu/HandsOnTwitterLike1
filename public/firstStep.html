@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Like a Twitter</title>
+    <link rel="manifest" href="./manifest.json">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script defer src="/__/firebase/6.1.0/firebase-app.js"></script>
+    <script defer src="/__/firebase/6.1.0/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/6.1.0/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+  </head>
+  <body>
+
+    <div class="hide card" id="template">
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title"></span>
+            <p class="message"></p>
+          </div>
+          <div class="card-action">
+            <a class="likeBtn" style="cursor: pointer;">like　<span class="likeCount"></span>件 </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col s12 input-field">
+          <div class="row">
+            <div class="input-field col s12">
+              <input placeholder="User Name" id="first_name" type="text">
+              <label for="first_name">User Name</label>
+            </div>
+            <div class="input-field col s12">
+              <input placeholder="Message" id="message" type="text">
+              <label for="first_name">Message</label>
+            </div>
+            <div class="input-field col s12">
+              <button class="btn sendBtn waves-effect waves-light" name="action">Submit
+                <i class="material-icons right">send</i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="MessageArea">
+      </div>
+    </div>
+
+
+    <script>
+
+      // Tweet処理
+      $('.sendBtn').click(() => {
+        const name = $('#first_name').val();
+        const message = $('#message').val();
+        if(!name || !message) return;
+
+        // refer from https://firebase.google.com/docs/firestore/quickstart?hl=ja#add_data
+        db.collection("tweet").add({
+          user: name,
+          message: message,
+          token: window.token,
+          like: 0
+        })
+        .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+        })
+        .catch(function(error) {
+          console.error("Error adding document: ", error);
+        });
+      });
+
+      // いいねボタン処理
+      const Like = (docId) => {
+        // refer from https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference.html#update
+        // refer from https://firebase.google.com/docs/reference/js/firebase.firestore.FieldValue
+        db.collection("tweet").doc(docId).update({ like: firebase.firestore.FieldValue.increment(1) });
+      }
+
+      const refresh = () => {
+        $('#MessageArea').empty();
+
+        // refer from https://firebase.google.com/docs/firestore/quickstart?hl=ja#read_data
+        db.collection('tweet').get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const d = doc.data();
+            const tpl  = document.getElementById('template');
+            const clone = $(tpl.cloneNode(true));
+            clone.attr('id', doc.id);
+            clone.removeClass('hide');
+            clone.find('.card-title').text(d.user);
+            clone.find('.message').text(d.message);
+            clone.find('.likeCount').text(d.like);
+            clone.find('.likeBtn').click(() => {
+              Like(doc.id);
+            });
+            $('#MessageArea').append(clone);
+          });
+        });
+      }
+
+      // ページ読み込み後の初期化処理
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          window.db = firebase.firestore();
+          refresh();
+          db.collection("tweet").onSnapshot(function(doc) {
+            refresh();
+          });
+          // refer from https://qiita.com/ryo_hisano/items/1171beca22d5a04ed802
+          // refer from https://firebase.google.com/docs/cloud-messaging/js/client?hl=ja
+          const messaging = firebase.messaging();
+          messaging.usePublicVapidKey("BB6Al20ZBmsayxBRqSgjGOoKKv8WCdEtB-mhaOcABOhbk-gzyLNEvvay4uvEkBbZTXcqdiBbBKZL6SqVe42DNRk");
+          messaging.requestPermission().then(function() {
+            messaging.getToken().then(function(currentToken) {
+              if (currentToken) {
+                window.token = currentToken;
+              } else {
+                console.log('No Instance ID token available. Request permission to generate one.');
+              }
+            }).catch(function(err) {
+              console.log('An error occurred while retrieving token. ', err);
+            });
+          }).catch(function(err) {
+            console.log('Unable to get permission to notify.', err);
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    </script>
+  </body>
+</html>
