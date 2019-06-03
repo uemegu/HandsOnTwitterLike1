@@ -61,12 +61,15 @@ Googleのアカウントで利用することができ、AWS/GCP/Azureなどと�
 #### セットアップ（1）
 Firebaseのコンソールからプロジェクトを追加します<br>
 ![](images/1.png)
+<br>
 
 <br>
 アプリ名は適当に入れてください。<br>
 今回はロケーションは選択可能なところであればどこでも良いです。<br>
 
 ![](images/2.png)
+<br>
+<br>
 
 
 プロジェクト画面に入ったら`</>`のアイコン部分を選択します。<br>
@@ -76,37 +79,54 @@ Firebaseのコンソールからプロジェクトを追加します<br>
 <br>
 アプリ名は適当に入れてください。<br>
 ![](images/6.png)
+<br>
+<br>
 
 ここは特に何もしなくて良いです。<br>
 ![](images/5.png)
+<br>
+<br>
 
 適当なディレクトリに今回のプロジェクト用ディレクトリを作成し、その中で書いてあるコマンドを実施してください。<br>
 `npm install`でパッケージをインストールします。`-g`をつけることでグローバルな場所にインストールします。このコマンドにより、FirebaseのCLIコマンドがコマンドラインから入力できるようになります。
 ![](images/7.png)
+<br>
+<br>
 
 `deploy`以外の書いてあるコマンドを実施します（以降のスクリーンショットに続く）<br>
 ![](images/8.png)
+<br>
+<br>
 
 `firebase login`の後にアカウントを聞かれるので、ご自身のGoogleアカウントを入力してください。
 
 `firebase init`を入力して、プロジェクトを初期化します。Firestore, Functions, Hostingを選択してください。選択はスペースキーでします。
 ![](images/27.png)
+<br>
+<br>
 
 プロジェクトを選択します。今回作ったプロジェクトを選択してください。
 ![](images/12.png)
+<br>
+<br>
 
 Functionsの言語を選択してください。ここではJavaScriptを選択してください。
 ![](images/13.png)
+<br>
+<br>
 
 そのほかいろいろ聞かれることはデフォルトのままエンターを押してください。
 ![](images/14.png)
 
 ![](images/15.png)
+<br>
+<br>
 
 全部実行が終わると、こんな感じのファイルが自動で生成されてます。
 ![](images/16.png)
-
-
+<br>
+<br>
+この時点でも`firebase serve`とコマンドを入力して、localhost:5000を開くと画面が表示されます。
 ![](images/22.png)
 ![](images/23.png)
 
@@ -137,6 +157,7 @@ iOS/Androidアプリ以外にもChromeやFirefoxなどのブラウザはNotifica
 
 ##### FireStoreのセットアップ
 
+FireStoreはリアルタイムなDBで、API経由でクライアントから直接操作できます。AWSでのAppSyncに相当します。2019年6月時点ではAzureには相当する機能はないです。
 次に`Databse`のメニューを選択し、`データベースの作成`を選択して下さい。
 ![](images/24.png)
 
@@ -162,13 +183,81 @@ iOS/Androidアプリ以外にもChromeやFirefoxなどのブラウザはNotifica
 
 public配下は`Hosting`にアップロードされ、ブラウザから見られるファイルになります。
 
-* index.html
+**public/index.html**
+
+firstStep.htmlの内容をコピペしてください。<br>
+可読性重視のためあえてjQueryを書いてます。<br>
+`script`には以下の処理が書かれてます。
+
+* Tweetボタンを押した時の処理
+* Likeボタンを押した時の処理
+* FireStoreからデータを取ってきて表示する処理
+* FireStoreに更新があった時の処理
+* ウェブプッシュのためのトークン取得処理
+
+https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firstStep.html
+
+**public/firebase-messaging-sw.js**
+
+PWAのService Workerです。このファイル名は固定です。<br>
+https://firebase.google.com/docs/cloud-messaging/js/receive
+
+PWAはProgressive Web Applicationの略でGoogleが推してるアプリの形式です。WebアプリでありながらNativeの機能も使えるようにするイメージです。例によってiOSでは制約かかってるのでiOSで使うメリットはほぼないです。
+
+GitHubにあげている以下のファイルをそのまま置いて、`送信者ID`を書かれている部分を自分の送信者IDに書き換えて下さい。
+送信者IDはセットアップ(2)で見た`クラウドメッセージング`に書かれてます。
+
+https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firebase-messaging-sw.js
+
+**public/manifest.json**
+
+PWAのマニフェストファイルです。
+GitHubにあげている以下のファイルをそのまま置いて下さい。
+ここの`gcm_sender_id`は固定値です。
+
+https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/manifest.json
 
 
+**functions/index.js**
 
+Functionsのロジックです。
+FunctionsはAWSでのLambda, AzureでのFunctionsにあたります。
+今回はクライアント向けのAPIとしては利用せず、FireStoreの更新をトリガーとしてウェブプッシュを送るロジックを書きます。<br>
+FireStore＋Functionsのトリガーの組み合わせは非常に強力で、レガシーなシステムでは必要だった多くのWEBアプリサーバーの機能が不要になります。
 
-![](images/29.png)
+GitHubにあげている以下のファイルをそのまま置いて下さい。
+
+https://github.com/uemegu/HandsOnTwitterLike1/blob/master/functions/index.js
+
+Functionsが出来たら、コマンドでアップロードします。<br>
+`firebase deploy --only functions`
+
 ![](images/30.png)
+
+**firestore.rules**
+
+FireStoreのセキュリティルールです。<br>
+認証については2回目でやるので、今回は無認証にします。<br>
+無課金なので不正利用で課金されることはないです。<br>
+
+````
+allow read, write: if false;
+````
+これの最後の方のを消します。
+````
+allow read, write;
+````
+
+修正したらコマンドでアップロードします。<br>
+`firebase deploy --only firestore:rules`
+
+![](images/31.png)
+
+
+#### 動かしてみる
+
+`firebase serve`とコマンドを入力して確認してみてください。
+
 
 
 
