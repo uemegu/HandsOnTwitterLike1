@@ -48,9 +48,7 @@ Firebaseは素晴らしいサービスですが特別に推進してるわけで
 
 ## ハンズオン
 
-### Firebaseのセットアップ
-
-#### Firebaseとは？
+### Firebaseとは？
 元々はFirebase社が開発していたモバイルアプリ向けのバックエンドプラットフォーム（MBaaS: Mobile Backend as a Service）です。
 2014年にGoogleが買収し、現在はGoogleのクラウド(GCP)上で提供されています。
 
@@ -58,32 +56,37 @@ Googleのアカウントで利用することができ、AWS/GCP/Azureなどと�
 
 はっきりと「無料プラン」と書かれている状態で使えるので安心です。
 
-#### セットアップ（1）
+### セットアップ（1）
 Firebaseのコンソールからプロジェクトを追加します<br>
 ![](images/1.png)
 <br>
-
 <br>
+<br>
+
 アプリ名は適当に入れてください。<br>
 今回はロケーションは選択可能なところであればどこでも良いです。<br>
 
 ![](images/2.png)
 <br>
 <br>
-
+<br>
 
 プロジェクト画面に入ったら`</>`のアイコン部分を選択します。<br>
 ![](images/3.png)
 ![](images/21.png)
 <br>
 <br>
+<br>
+
 アプリ名は適当に入れてください。<br>
 ![](images/6.png)
+<br>
 <br>
 <br>
 
 ここは特に何もしなくて良いです。<br>
 ![](images/5.png)
+<br>
 <br>
 <br>
 
@@ -92,9 +95,11 @@ Firebaseのコンソールからプロジェクトを追加します<br>
 ![](images/7.png)
 <br>
 <br>
+<br>
 
 `deploy`以外の書いてあるコマンドを実施します（以降のスクリーンショットに続く）<br>
 ![](images/8.png)
+<br>
 <br>
 <br>
 
@@ -104,14 +109,17 @@ Firebaseのコンソールからプロジェクトを追加します<br>
 ![](images/27.png)
 <br>
 <br>
+<br>
 
 プロジェクトを選択します。今回作ったプロジェクトを選択してください。
 ![](images/12.png)
 <br>
 <br>
+<br>
 
 Functionsの言語を選択してください。ここではJavaScriptを選択してください。
 ![](images/13.png)
+<br>
 <br>
 <br>
 
@@ -121,17 +129,20 @@ Functionsの言語を選択してください。ここではJavaScriptを選択�
 ![](images/15.png)
 <br>
 <br>
+<br>
 
 全部実行が終わると、こんな感じのファイルが自動で生成されてます。
 ![](images/16.png)
 <br>
 <br>
+<br>
+
 この時点でも`firebase serve`とコマンドを入力して、localhost:5000を開くと画面が表示されます。
 ![](images/22.png)
 ![](images/23.png)
 
 
-#### セットアップ（2）
+### セットアップ（2）
 
 FirebaseのWEB画面の設定に戻ります。
 次は以下の設定を実施していきます。
@@ -139,11 +150,12 @@ FirebaseのWEB画面の設定に戻ります。
 * クラウドメッセージングのセットアップ
 * FireStoreのセットアップ
 
-##### クラウドメッセージングのセットアップ
+#### クラウドメッセージングのセットアップ
 
 画面左上にある歯車から`プロジェクトの設定`を選択します。
 
 ![](images/17.png)
+<br>
 
 クラウドメッセージング（FCM)を使える状態にします。
 今回はWEBアプリなのでウェブプッシュを使います。
@@ -153,21 +165,24 @@ iOS/Androidアプリ以外にもChromeやFirefoxなどのブラウザはNotifica
 
 ![](images/19.png)
 ![](images/20.png)
+<br>
 
 
-##### FireStoreのセットアップ
+#### FireStoreのセットアップ
 
 FireStoreはリアルタイムなDBで、API経由でクライアントから直接操作できます。AWSでのAppSyncに相当します。2019年6月時点ではAzureには相当する機能はないです。
 次に`Databse`のメニューを選択し、`データベースの作成`を選択して下さい。
 ![](images/24.png)
+<br>
 
 セキュリテイルールは、認証済みのユーザーが許可された操作だけを実行できるように設定するためのものです。一旦`ロックモードで開始`を選択します。
 ![](images/25.png)
 ![](images/26.png)
+<br>
 
 
 
-#### 実装
+### 実装
 
 と言っても、用意してるのであまり実装することはありません。
 以下の準備をします。
@@ -179,7 +194,7 @@ FireStoreはリアルタイムなDBで、API経由でクライアントから直
 * firestore.rules
 
 
-##### public配下の実装
+#### public配下の実装
 
 public配下は`Hosting`にアップロードされ、ブラウザから見られるファイルになります。
 
@@ -196,6 +211,8 @@ firstStep.htmlの内容をコピペしてください。<br>
 * ウェブプッシュのためのトークン取得処理
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firstStep.html
+<br>
+<br>
 
 **public/firebase-messaging-sw.js**
 
@@ -208,6 +225,8 @@ GitHubにあげている以下のファイルをそのまま置いて、`送信�
 送信者IDはセットアップ(2)で見た`クラウドメッセージング`に書かれてます。
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firebase-messaging-sw.js
+<br>
+<br>
 
 **public/manifest.json**
 
@@ -216,6 +235,8 @@ GitHubにあげている以下のファイルをそのまま置いて下さい�
 ここの`gcm_sender_id`は固定値です。
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/manifest.json
+<br>
+<br>
 
 
 **functions/index.js**
@@ -228,11 +249,15 @@ FireStore＋Functionsのトリガーの組み合わせは非常に強力で、�
 GitHubにあげている以下のファイルをそのまま置いて下さい。
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/functions/index.js
+<br>
+<br>
 
 Functionsが出来たら、コマンドでアップロードします。<br>
 `firebase deploy --only functions`
 
 ![](images/30.png)
+<br>
+<br>
 
 **firestore.rules**
 
@@ -247,14 +272,18 @@ allow read, write: if false;
 ````
 allow read, write;
 ````
+<br>
+<br>
 
 修正したらコマンドでアップロードします。<br>
 `firebase deploy --only firestore:rules`
 
 ![](images/31.png)
+<br>
+<br>
 
 
-#### 動かしてみる
+### 動かしてみる
 
 `firebase serve`とコマンドを入力して確認してみてください。
 
