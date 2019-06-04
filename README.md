@@ -36,6 +36,11 @@ Firebaseは素晴らしいサービスですが特別に推進してるわけで
 **狙い**：WEBアプリのフロント開発を体験する。<br>
 **キーワード**：検討中（2時間じゃ無理なので全部準備？）<br>
 **所要時間**：2時間<br><br>
+4. 3.で作ったアプリにモリモリFirebaseの機能を入れてみる。<br>
+**狙い**：色んな機能が既にあるので試して実感して、情報をキャッチアップする癖をつける。<br>
+**キーワード**：Analytics, In-App Message, Config<br>
+**所要時間**：2時間<br><br>
+
 
 
 ## 事前準備
@@ -61,7 +66,25 @@ Googleのアカウントで利用することができ、AWS/GCP/Azureなどと�
 
 はっきりと「無料プラン」と書かれている状態で使えるので安心です。
 
+### PWAとは？
+PWAはProgressive Web Applicationの略でGoogleが推してるアプリの形式です。WebアプリでありながらNativeの機能も使えるようにするイメージです。例によってiOSでは制約かかってるのでiOSで使うメリットはほぼないです。セキュリティ的にiOSのポリシーとは合わないので今後もiOSの歩み寄りは望み薄いと思います。<br>
+しかし、最近ではGoogleがTWA（Trusted Web Application)としてPWAのアプリをGoogle Playにリリースするための手段を用意したり、MicrosoftがPWAビルダーを用意したりとそれなりの盛り上がりをみせているので、今後まだ発展していく可能性はあります。
+
+PWAのアプリを作る手順はざっくり2つで、HTTPSでホストされる場所にService WorkerというJavaScriptファイルと、JSON形式で書かれたマニフェストファイルを配置するだけです。
+
+
+### ハンズオンのアーキテクチャ
+こんな感じの設計になります。
+
+![](images/0.png)
+<br>
+<br>
+<br>
+
+
 ### セットアップ（1）
+**この手順は2019年6月時点での手順です。**
+
 Firebaseのコンソールからプロジェクトを追加します<br>
 ![](images/1.png)
 <br>
@@ -206,7 +229,7 @@ public配下は`Hosting`にアップロードされ、ブラウザから見ら�
 **public/index.html**
 
 firstStep.htmlの内容をコピペしてください。<br>
-可読性重視のためあえてjQueryを書いてます。<br>
+重厚なJSフレームワークを使うと理解に時間がかかるため、あえてjQueryで書いてます。<br>
 `script`には以下の処理が書かれてます。
 
 * Tweetボタンを押した時の処理
@@ -224,10 +247,9 @@ https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firstStep.html
 PWAのService Workerです。このファイル名は固定です。<br>
 https://firebase.google.com/docs/cloud-messaging/js/receive
 
-PWAはProgressive Web Applicationの略でGoogleが推してるアプリの形式です。WebアプリでありながらNativeの機能も使えるようにするイメージです。例によってiOSでは制約かかってるのでiOSで使うメリットはほぼないです。
-
-GitHubにあげている以下のファイルをそのまま置いて、`送信者ID`を書かれている部分を自分の送信者IDに書き換えて下さい。
-送信者IDはセットアップ(2)で見た`クラウドメッセージング`に書かれてます。
+GitHubにあげている以下のファイルをそのまま置いて、`送信者ID`と書かれている部分を自分の送信者IDに書き換えて下さい。
+送信者IDはセットアップ(2)で見た`クラウドメッセージング`の画面に書かれてます。
+実装内容については見ていただければ、だいたい意味はわかると思います。
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firebase-messaging-sw.js
 <br>
@@ -238,6 +260,7 @@ https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firebase-messag
 PWAのマニフェストファイルです。
 GitHubにあげている以下のファイルをそのまま置いて下さい。
 ここの`gcm_sender_id`は固定値です。
+実装内容については見ていただければ、だいたい意味はわかると思います。
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/manifest.json
 <br>
@@ -249,9 +272,13 @@ https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/manifest.json
 Functionsのロジックです。
 FunctionsはAWSでのLambda, AzureでのFunctionsにあたります。
 今回はクライアント向けのAPIとしては利用せず、FireStoreの更新をトリガーとしてウェブプッシュを送るロジックを書きます。<br>
-FireStore＋Functionsのトリガーの組み合わせは非常に強力で、レガシーなシステムでは必要だった多くのWEBアプリサーバーの機能が不要になります。
+FireStore＋Functionsのトリガーの組み合わせは非常に強力で、レガシーなシステムでは必要だった多くのWEBアプリサーバーの機能が不要になります。その反面、セキュリティの考慮や呼び出し回数（課金）についてよく検討する必要があります。
 
-GitHubにあげている以下のファイルをそのまま置いて下さい。
+GitHubにあげている以下のファイルをそのまま置いて下さい。<br>
+内容としては以下の処理を実施しています。
+* FireStoreのTweetというコレクションを監視
+* 更新があった場合、Tokenというプロパティに入っている値を使ってプッシュを送る
+本来であれば、Tokenが有効でなかった場合のお掃除や、更新者自身にプッシュを送らないようにするなどの処理が必要ですが、今回は省いています。
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/functions/index.js
 <br>
@@ -268,12 +295,12 @@ Functionsが出来たら、コマンドでアップロードします。<br>
 
 FireStoreのセキュリティルールです。<br>
 認証については2回目でやるので、今回は無認証にします。<br>
-無課金なので不正利用で課金されることはないです。<br>
+無課金なので不正利用で課金されることはないので安心してください。<br>
 
 ````
 allow read, write: if false;
 ````
-これの最後の方のを消します。
+これの最後の方を消します。
 ````
 allow read, write;
 ````
@@ -295,11 +322,21 @@ allow read, write;
 ２種類のブラウザを起動し、LIKEボタンを押すとリアルタイムで他方に反映されてることが確認できると思います。
 
 
+<br>
+<br>
 
-### 後処理
+挙動が確認できたらWeb上にデプロイしてみます。
+`firebase deploy --only public`と入力してみてください。実施後、コンソールにURLが書かれているので、そのURLを開いてみましょう。
+<br>
+<br>
+
+
+## 後片付け
 
 FireStoreを無認証にしてるので、今回のハンズオンが終わった後は全拒否の設定に戻しておきましょう。
 次回、認証機能を追加します。
+<br>
+<br>
 
 
 ## 参考
