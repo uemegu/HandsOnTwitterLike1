@@ -228,7 +228,8 @@ public配下は`Hosting`にアップロードされ、ブラウザから見ら�
 
 **public/index.html**
 
-firstStep.htmlの内容をコピペしてください。<br>
+firstStep.htmlの内容をコピペして、`鍵をここに書く`という部分だけ書き換えてください。<br>
+鍵は先ほど設定した、`ウェブプッシュ証明書`の`鍵ペア`という部分に書かれてる文字列です。<br>
 重厚なJSフレームワークを使うと理解に時間がかかるため、あえてjQueryで書いてます。<br>
 `script`には以下の処理が書かれてます。
 
@@ -328,7 +329,7 @@ allow read, write;
 <br>
 
 挙動が確認できたらWeb上にデプロイしてみます。
-`firebase deploy --only public`と入力してみてください。実施後、コンソールにURLが書かれているので、そのURLを開いてみましょう。
+`firebase deploy --only hosting`と入力してみてください。実施後、コンソールにURLが書かれているので、そのURLを開いてみましょう。
 <br>
 <br>
 

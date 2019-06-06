@@ -24,22 +24,22 @@
             <p class="message"></p>
           </div>
           <div class="card-action">
-            <a style="cursor: pointer; margin-right: 3rem;">
-                <i class="material-icons">chat_bubble_outline</i>
-                <span tyle="margin-left: .25rem;">0</span>件 
-              </a>
-              <a style="cursor: pointer; margin-right: 3rem;">
-                <i class="material-icons">repeat</i>
-                <span style="margin-left: .25rem;">0</span>件 
-              </a>
-              <a class="likeBtn" style="cursor: pointer; margin-right: 3rem;">
-                <i class="material-icons">favorite</i>
-                <span class="likeCount" style="margin-left: .25rem;"></span>件 
-              </a>
-              <a style="cursor: pointer; margin-right: 3rem;">
-                <i class="material-icons">mail</i>
-              </a>
-            </div>
+            <a style="cursor: pointer; margin-right: 3rem; color: #657786;">
+              <i class="material-icons">chat_bubble_outline</i>
+              <span tyle="margin-left: .25rem;">0</span>件 
+            </a>
+            <a style="cursor: pointer; margin-right: 3rem; color: #657786;">
+              <i class="material-icons">repeat</i>
+              <span style="margin-left: .25rem;">0</span>件 
+            </a>
+            <a class="likeBtn" style="cursor: pointer; margin-right: 3rem; color: #657786;">
+              <i class="material-icons">favorite</i>
+              <span class="likeCount" style="margin-left: .25rem;"></span>件 
+            </a>
+            <a style="cursor: pointer; margin-right: 3rem; color: #657786;">
+              <i class="material-icons">mail</i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -122,7 +122,7 @@
       }
 
       function Initialize() {
-        $('.sendBtn').click(ClickSendBtn);
+        $('.sendBtn').click(ClickSendButton);
 
         try {
           window.db = firebase.firestore();
@@ -154,7 +154,7 @@
 
       // ページ読み込み後の初期化処理
       document.addEventListener('DOMContentLoaded', Initialize);
-
+      
     </script>
   </body>
 </html>
