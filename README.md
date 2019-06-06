@@ -64,7 +64,7 @@ Googleのアカウントで利用することができ、AWS/GCP/Azureなどと�
 
 ### PWAとは？
 PWAはProgressive Web Applicationの略でGoogleが推してるアプリの形式です。WebアプリでありながらNativeの機能も使えるようにするイメージです。例によってiOSでは制約かかってるのでiOSで使うメリットはほぼないです。セキュリティ的にiOSのポリシーとは合わないので今後もiOSの歩み寄りは望み薄いと思います。<br>
-しかし、最近ではGoogleがTWA（Trusted Web Application)としてPWAのアプリをGoogle Playにリリースするための手段を用意したり、MicrosoftがPWAビルダーを用意したりとそれなりの盛り上がりをみせているので、今後まだ発展していく可能性はあります。
+しかし、最近ではGoogleがTWA（Trusted Web Activity)としてPWAのアプリをGoogle Playにリリースするための手段を用意したり、MicrosoftがPWAビルダーを用意したりとそれなりの盛り上がりをみせているので、今後まだ発展していく可能性はあります。
 
 PWAのアプリを作る手順はざっくり2つで、HTTPSでホストされる場所にService WorkerというJavaScriptファイルと、JSON形式で書かれたマニフェストファイルを配置するだけです。
 
