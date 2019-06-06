@@ -72,7 +72,7 @@
     <script>
 
       // Tweet処理
-      $('.sendBtn').click(() => {
+      function ClickSendButton() {
         const name = $('#first_name').val();
         const message = $('#message').val();
         if(!name || !message) return;
@@ -90,16 +90,16 @@
         .catch(function(error) {
           console.error("Error adding document: ", error);
         });
-      });
+      }
 
       // いいねボタン処理
-      const Like = (docId) => {
+      function ClickLikeButton(docId) {
         // refer from https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference.html#update
         // refer from https://firebase.google.com/docs/reference/js/firebase.firestore.FieldValue
         db.collection("tweet").doc(docId).update({ like: firebase.firestore.FieldValue.increment(1) });
       }
 
-      const refresh = () => {
+      function Refresh() {
         $('#MessageArea').empty();
 
         // refer from https://firebase.google.com/docs/firestore/quickstart?hl=ja#read_data
@@ -114,25 +114,26 @@
             clone.find('.message').text(d.message);
             clone.find('.likeCount').text(d.like);
             clone.find('.likeBtn').click(() => {
-              Like(doc.id);
+              ClickLikeButton(doc.id);
             });
             $('#MessageArea').append(clone);
           });
         });
       }
 
-      // ページ読み込み後の初期化処理
-      document.addEventListener('DOMContentLoaded', function() {
+      function Initialize() {
+        $('.sendBtn').click(ClickSendBtn);
+
         try {
           window.db = firebase.firestore();
-          refresh();
+          Refresh();
           db.collection("tweet").onSnapshot(function(doc) {
-            refresh();
+            Refresh();
           });
           // refer from https://qiita.com/ryo_hisano/items/1171beca22d5a04ed802
           // refer from https://firebase.google.com/docs/cloud-messaging/js/client?hl=ja
           const messaging = firebase.messaging();
-          messaging.usePublicVapidKey("BB6Al20ZBmsayxBRqSgjGOoKKv8WCdEtB-mhaOcABOhbk-gzyLNEvvay4uvEkBbZTXcqdiBbBKZL6SqVe42DNRk");
+          messaging.usePublicVapidKey("鍵をここに書く");
           messaging.requestPermission().then(function() {
             messaging.getToken().then(function(currentToken) {
               if (currentToken) {
@@ -149,7 +150,11 @@
         } catch (e) {
           console.error(e);
         }
-      });
+      }
+
+      // ページ読み込み後の初期化処理
+      document.addEventListener('DOMContentLoaded', Initialize);
+
     </script>
   </body>
 </html>

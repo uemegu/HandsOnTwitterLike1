@@ -237,7 +237,9 @@ firstStep.htmlの内容をコピペしてください。<br>
 * FireStoreからデータを取ってきて表示する処理
 * FireStoreに更新があった時の処理
 * ウェブプッシュのためのトークン取得処理
-
+<br>
+※リプライ、リツイート、DM機能は見た目だけで処理は実装してません
+<br>
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/firstStep.html
 <br>
 <br>
