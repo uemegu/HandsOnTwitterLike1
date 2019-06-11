@@ -358,5 +358,9 @@ https://firebase.google.com/docs/cli/?hl=ja
 Firebase Cloud FireStore クイックリファレンス<br>
 https://firebase.google.com/docs/firestore/quickstart?hl=ja
 
+Firebase Cloud FireStore の制限<br>
+https://firebase.google.com/docs/firestore/quotas?hl=ja
+
 Firebase Cloud Messaging (JavaScript)<br>
 https://firebase.google.com/docs/cloud-messaging/js/client?hl=ja
+
