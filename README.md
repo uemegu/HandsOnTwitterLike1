@@ -83,6 +83,7 @@ PWAのアプリを作る手順はざっくり2つで、HTTPSでホストされ�
 **この手順は2019年6月時点での手順です。**
 
 Firebaseのコンソールからプロジェクトを追加します<br>
+URLは https://console.firebase.google.com/u/0/?hl=ja です
 ![](images/1.png)
 <br>
 <br>
@@ -117,6 +118,7 @@ Firebaseのコンソールからプロジェクトを追加します<br>
 <br>
 
 適当なディレクトリに今回のプロジェクト用ディレクトリを作成し、その中で書いてあるコマンドを実施してください。<br>
+わらわらファイルやディレクトリが生成されるのでプロジェクト用ディレクトリを作成して、その中でコマンドを実行してください。<br>
 `npm install`でパッケージをインストールします。`-g`をつけることでグローバルな場所にインストールします。このコマンドにより、FirebaseのCLIコマンドがコマンドラインから入力できるようになります。
 ![](images/7.png)
 <br>
@@ -143,7 +145,7 @@ Firebaseのコンソールからプロジェクトを追加します<br>
 <br>
 <br>
 
-Functionsの言語を選択してください。ここではJavaScriptを選択してください。
+Functionsの言語を選択してください。ここではJavaScriptを選択してください。今回のハンズオンがJavaScriptでファイルを用意してるためです。
 ![](images/13.png)
 <br>
 <br>
@@ -262,7 +264,7 @@ PWAのマニフェストファイルです。
 GitHubにあげている以下のファイルをそのまま置いて下さい。
 ここの`gcm_sender_id`は固定値です。
 実装内容については見ていただければ、だいたい意味はわかると思います。
-`start_url`の部分は先ほど用意したHTMLファイルの名前に合わせてください。
+`start_url`の部分は先ほど用意したHTMLファイルの名前に合わせてください。（index.htmlかfirstStep.htmlになると思います）
 
 https://github.com/uemegu/HandsOnTwitterLike1/blob/master/public/manifest.json
 <br>
@@ -330,6 +332,12 @@ allow read, write;
 
 挙動が確認できたらWeb上にデプロイしてみます。
 `firebase deploy --only hosting`と入力してみてください。実施後、コンソールにURLが書かれているので、そのURLを開いてみましょう。
+<br>
+<br>
+firebaseのコンソールで、DatabaseやFunctionsの画面を見てみましょう。データが入ってたりログが出てたりするのが確認できます。<br>
+Functionsのログにこんなのがあるのに気づくと思います。<br><br>
+`Billing account not configured. External network is not accessible and quotas are severely limited. Configure billing account to remove these restrictions`<br><br>
+これは「無課金だとFunctionsからFirebaseの外の世界にアクセスできないよ、お金払えばこの制約は無くなるよ」と言ってます。今回はFireStoreとMessagingしかアクセスしてないのでこの制約には該当しません。
 <br>
 <br>
 
