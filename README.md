@@ -349,6 +349,12 @@ FireStoreを無認証にしてるので、今回のハンズオンが終わっ�
 <br>
 <br>
 
+## 続編
+
+https://github.com/uemegu/HandsOnTwitterLike2
+
+<br>
+<br>
 
 ## 参考
 
